@@ -1,7 +1,7 @@
 # Backgammon
 Backgammon interface for the final project in Computational Intelligence
 
-# The board interpretation
+## The board interpretation
 The two players are defined as player 1 and player -1.
 The board then currently has 29 positions:
 - number 0 is not being used
@@ -18,8 +18,10 @@ few examples:
 - `board[28] = -2` would mean that player -1 has beared off two pieces.
 
 
-# Moves
+## Moves
 info about the moves missing...
 
-# Thougts
-The 0 positions is currently not used.. could possibly be used to indicate which player is to move to speed up the process
+## Thougts
+- the 0 positions is currently not used.. could possibly be used to indicate which player is to move to speed up the process
+- running time for one game is ~0.06 seconds or just over a minute per 1000 games (see time_test.py)
+- the developed agent should probably be coded as a seperate file
