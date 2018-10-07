@@ -4,29 +4,13 @@
 Backgammon interface
 
 @author: helgi
-
-- we have two players, player 1 and player -1 
-- we have one board with 29 positions
-    (number 0 is currently not used)
-- positions 1-24 are the labeled on-board positions
-- positions 25 and 26 are the jails for when a piece is 
-    "killed" (25 for player 1 and 26 for player -1)
-- positions 27 and 28 represent the position of the beared 
-    of pieces (27 for player 1 and 28 for player -1)
-- the number of pieces in certain possition is represented by n
-    where |n| is the number of pieces in the position and 
-    sign(n) indicates which player owns the pieces in the
-    position.
-- the 0 positions is currently not used..
-    could be used to indicate which player is to move
 """
 import numpy as np
 import time
 
 def init_board():
     # initializes the game board
-    
-    # set up for the game
+   
     board = np.zeros(29)
     board[1] = -2
     board[12] = -5
