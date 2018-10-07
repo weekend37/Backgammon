@@ -1,7 +1,7 @@
 # Backgammon
 Backgammon interface for the final project in Computational Intelligence
 
-# The board
+# The board interpretation
 The two players are defined as player 1 and player -1.
 The board then currently has 29 positions:
 - number 0 is not being used
