@@ -9,7 +9,6 @@ import numpy as np
 
 def init_board():
     # initializes the game board
-   
     board = np.zeros(29)
     board[1] = -2
     board[12] = -5
@@ -202,45 +201,58 @@ def agent(boards,moves):
         move = moves[np.random.randint(len(moves))]
     return move
 
-# __main__
-board = init_board() # initialize the board
-player = 1 # player 1 starts
-numberOfTurns = 0
-printCommands = True
 
-# play on
-while (not game_over(board) and not check_for_error(board)):
-    if printCommands: print("lets go player ",player)
+def play_a_game(commentary = True):
+    board = init_board() # initialize the board
+    player = 1 # player 1 starts
+    numberOfTurns = 0
     
-    dice = roll_dice() # roll dice
-    if printCommands: print("rolled dices:", dice)
-    
-    # make a move (2 moves if the same number appears on the dices)
-    for i in range(1+int(dice[0] == dice[1])):
-        # check out the legal moves available for dice
-        board_copy = np.copy(board) # skrýtið að þetta þurfti
-        possible_moves, possible_boards = legal_moves(board_copy, dice, player)
-        # if printCommands: print("possible moves: ", possible_moves)
+    # play on
+    while (not game_over(board) and not check_for_error(board)):
+        if commentary: print("lets go player ",player)
         
-        # use your policy to pick the best move
-        if player == 1:
-            move = agent(possible_boards, possible_moves)
-        elif player == -1:
-            move = random_agent(possible_boards, possible_moves)
+        dice = roll_dice() # roll dice
+        if commentary: print("rolled dices:", dice)
+        
+        # make a move (2 moves if the same number appears on the dices)
+        for i in range(1+int(dice[0] == dice[1])):
+            # check out the legal moves available for dice
+            board_copy = np.copy(board) # skrýtið að þetta þurfti
+            possible_moves, possible_boards = legal_moves(board_copy, dice, player)
+            # if commentary: print("possible moves: ", possible_moves)
             
-        # need to make sure the move is one of the possible moves
-        # maybe only use integers as an output of the agents?
-        if printCommands: print("move chosen by player ",player,":",move)
+            # use your policy to pick the best move
+            if player == 1:
+                move = agent(possible_boards, possible_moves)
+            elif player == -1:
+                move = random_agent(possible_boards, possible_moves)
+                
+            # need to make sure the move is one of the possible moves
+            # maybe only use integers as an output of the agents?
+            if commentary: print("move chosen by player ",player,":",move)
+            
+            # make the move and update the board
+            for m in move:
+                board = update_board(board, m, player)
         
-        # make the move and update the board
-        for m in move:
-            board = update_board(board, m, player)
+            if commentary: print("the board after his move: ", board)
     
-        if printCommands: print("the board after his move: ", board)
+        # players take turns 
+        player = -player
+        
+        # count the turns
+        numberOfTurns += 1
+    
+    numberOfRounds = int(np.floor(numberOfTurns/2))
+    
+    # return the winner and the number of rounds
+    return -1*player, numberOfRounds
 
-    # players take turns 
-    player = -player
+def main():
+    winner, numberOfRounds = play_a_game(commentary=False)
+    print("player", winner, "won the game in", numberOfRounds, "rounds")
     
-    # count the turns
-    numberOfTurns += 1
-    print("number of rounds:", int(np.floor(numberOfTurns/2)), "\n \n \n")
+if __name__ == '__main__':
+    main()
+
+
