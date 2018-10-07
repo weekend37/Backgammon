@@ -6,7 +6,6 @@ Backgammon interface
 @author: helgi
 """
 import numpy as np
-import time
 
 def init_board():
     # initializes the game board
@@ -190,11 +189,10 @@ def agent(boards,moves):
     return move
 
 # __main__
-begin = time.time()
 board = init_board() # initialize the board
 player = 1 # player 1 starts
 numberOfTurns = 0
-printCommands = False
+printCommands = True
 
 # play on
 while (not game_over(board) and not check_for_error(board)):
@@ -232,5 +230,3 @@ while (not game_over(board) and not check_for_error(board)):
     # count the turns
     numberOfTurns += 1
     # print("number of rounds:", int(np.floor(numberOfTurns/2)), "\n \n \n")
-    
-print("length of game: ", time.time()-begin)
