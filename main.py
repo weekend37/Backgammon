@@ -62,6 +62,14 @@ def legal_move(board, die, player):
             if sum(board[7:25]>0) == 0: 
                 if (board[die] > 0):
                     possible_moves.append(np.array([die,27]))
+                    
+                elif not game_over(board): # smá fix
+                    if np.max(np.where(board[1:7]>0)[0]+1)<die:
+                        # everybody's past the dice throw
+                        possible_start_pips = np.where(board[1:7]>0)[0]+1
+                        for s in possible_start_pips:
+                            possible_moves.append(np.array([s,27]))
+                    
             possible_start_pips = np.where(board[0:25]>0)[0]
 
             # finding all other legal options
@@ -84,9 +92,15 @@ def legal_move(board, die, player):
             if sum(board[1:19]<0) == 0: 
                 if (board[25-die] < 0):
                     possible_moves.append(np.array([25-die,28]))
-            possible_start_pips = np.where(board[0:25]<0)[0]
+                elif not game_over(board): # smá fix
+                    if np.max(np.where(board[19:25][::-1]<0)[0]+1)<die:
+                        # everybody's past the dice throw
+                        possible_start_pips = np.where(board[19:25]<0)[0]+19
+                        for s in possible_start_pips:
+                            possible_moves.append(np.array([s,28]))
 
             # finding all other legal options
+            possible_start_pips = np.where(board[0:25]<0)[0]
             for s in possible_start_pips:
                 end_pip = s+die
                 if end_pip < 25:
@@ -229,4 +243,4 @@ while (not game_over(board) and not check_for_error(board)):
     
     # count the turns
     numberOfTurns += 1
-    # print("number of rounds:", int(np.floor(numberOfTurns/2)), "\n \n \n")
+    print("number of rounds:", int(np.floor(numberOfTurns/2)), "\n \n \n")
