@@ -21,7 +21,7 @@ few examples:
 ## Moves
 info about the moves missing...
 
-## Thougts
+## Thoughts
 - the 0 position is currently not used.. could possibly be used to indicate which player is to move to speed up the process
 - running time for one game is ~0.06 seconds or just over a minute per 1000 games (see time_test.py)
 - the developed agent should probably be coded as a seperate file
