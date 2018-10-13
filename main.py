@@ -40,6 +40,9 @@ def check_for_error(board):
         print("To many pieces on board!")
     return errorInProgram
     
+def pretty_print(board):
+    string = str(np.array2string(board[1:13])+'\n'+np.array2string(board[24:12:-1]))
+    print(string)
     
 def legal_move(board, die, player):
     # finds legal moves for a board and one dice
@@ -63,11 +66,10 @@ def legal_move(board, die, player):
                     possible_moves.append(np.array([die,27]))
                     
                 elif not game_over(board): # smá fix
-                    if np.max(np.where(board[1:7]>0)[0]+1)<die:
-                        # everybody's past the dice throw
-                        possible_start_pips = np.where(board[1:7]>0)[0]+1
-                        for s in possible_start_pips:
-                            possible_moves.append(np.array([s,27]))
+                    # everybody's past the dice throw?
+                    s = np.max(np.where(board[1:7]>0)[0]+1)
+                    if s<die:
+                        possible_moves.append(np.array([s,27]))
                     
             possible_start_pips = np.where(board[0:25]>0)[0]
 
@@ -92,11 +94,10 @@ def legal_move(board, die, player):
                 if (board[25-die] < 0):
                     possible_moves.append(np.array([25-die,28]))
                 elif not game_over(board): # smá fix
-                    if np.max(np.where(board[19:25][::-1]<0)[0]+1)<die:
-                        # everybody's past the dice throw
-                        possible_start_pips = np.where(board[19:25]<0)[0]+19
-                        for s in possible_start_pips:
-                            possible_moves.append(np.array([s,28]))
+                    # everybody's past the dice throw?
+                    s = np.min(np.where(board[19:25]<0)[0])
+                    if (6-s)<die:
+                        possible_moves.append(np.array([19+s,28]))
 
             # finding all other legal options
             possible_start_pips = np.where(board[0:25]<0)[0]
@@ -125,14 +126,15 @@ def legal_moves(board, dice, player):
             moves.append(np.array([m1,m2]))
             boards.append(update_board(temp_board,m2,player))
         
-    # try using the second dice, then the first one
-    possible_first_moves = legal_move(board, dice[1], player)
-    for m1 in possible_first_moves:
-        temp_board = update_board(board,m1,player)
-        possible_second_moves = legal_move(temp_board,dice[0], player)
-        for m2 in possible_second_moves:
-            moves.append(np.array([m1,m2]))
-            boards.append(update_board(temp_board,m2,player))
+    if dice[0] != dice[1]:
+        # try using the second dice, then the first one
+        possible_first_moves = legal_move(board, dice[1], player)
+        for m1 in possible_first_moves:
+            temp_board = update_board(board,m1,player)
+            possible_second_moves = legal_move(temp_board,dice[0], player)
+            for m2 in possible_second_moves:
+                moves.append(np.array([m1,m2]))
+                boards.append(update_board(temp_board,m2,player))
             
     # if there's no pair of moves available, allow one move:
     if len(moves)==0: 
@@ -154,8 +156,6 @@ def update_board(board, move, player):
     # updates the board
     # inputs are some board, one move and the player
     # outputs the updated board
-    
-    # copying the board is needed for some reason
     board_to_update = np.copy(board) 
 
     # if the move is there
@@ -201,7 +201,6 @@ def agent(boards,moves):
         move = moves[np.random.randint(len(moves))]
     return move
 
-
 def play_a_game(commentary = True):
     board = init_board() # initialize the board
     player = 1 # player 1 starts
@@ -217,7 +216,7 @@ def play_a_game(commentary = True):
         # make a move (2 moves if the same number appears on the dices)
         for i in range(1+int(dice[0] == dice[1])):
             # check out the legal moves available for dice
-            board_copy = np.copy(board) # skrýtið að þetta þurfti
+            board_copy = np.copy(board)
             possible_moves, possible_boards = legal_moves(board_copy, dice, player)
             # if commentary: print("possible moves: ", possible_moves)
             
@@ -235,7 +234,7 @@ def play_a_game(commentary = True):
             for m in move:
                 board = update_board(board, m, player)
         
-            if commentary: print("the board after his move: ", board)
+            if commentary: pretty_print(board)
     
         # players take turns 
         player = -player
@@ -249,10 +248,17 @@ def play_a_game(commentary = True):
     return -1*player, numberOfRounds
 
 def main():
-    winner, numberOfRounds = play_a_game(commentary=False)
+    winner, numberOfRounds = play_a_game(commentary=True)
     print("player", winner, "won the game in", numberOfRounds, "rounds")
     
 if __name__ == '__main__':
     main()
+    
+    
+# notes fra tomasi
+# hver byrjar?
+# hver er hvað (reverse board)
+# spurning að leyfa veðmál? nei
+# bæta við dice í agent? frekar bæta við i
 
 
