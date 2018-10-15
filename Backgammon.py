@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Backgammon interface
-
-@author: helgi
+The agent is in another file
+Most, if not all, changes should only be made in the main function
 """
 import numpy as np
 import agent
@@ -22,7 +22,7 @@ def init_board():
     return board
 
 def roll_dice():
-    # rolls the dices
+    # rolls the dice
     dice = np.random.randint(1,7,2)
     return dice
 
@@ -32,7 +32,6 @@ def game_over(board):
 
 def check_for_error(board):
     # checks for obvious errors
-    # should probably not be in the final version
     errorInProgram = False
     
     if (sum(board[board>0]) != 15 or sum(board[board<0]) != -15):
@@ -42,7 +41,9 @@ def check_for_error(board):
     return errorInProgram
     
 def pretty_print(board):
-    string = str(np.array2string(board[1:13])+'\n'+np.array2string(board[24:12:-1]))
+    string = str(np.array2string(board[1:13])+'\n'+
+                 np.array2string(board[24:12:-1])+'\n'+
+                 np.array2string(board[25:29]))
     print(string)
     
 def legal_move(board, die, player):
@@ -177,68 +178,67 @@ def update_board(board, move, player):
     return board_to_update
     
     
-def random_agent(boards,moves):
-    # player -1
-    # agent with random policy 
-    # takes in all the possible moves and chooses a random one
-    if len(moves) == 0:
-        # if there aren't any possible moves
-        return []
-    else: 
-        move = moves[np.random.randint(len(moves))]
-    return move
+def random_agent(board_copy,dice,player,i):
+    # random agent
+    # inputs are the board, the dice and which player is to move
+    # outputs the chosen move randomly
     
+    # check out the legal moves available for dice throw
+    possible_moves, possible_boards = legal_moves(board_copy, dice, player)
+    
+    if len(possible_moves) == 0:
+        return []
+    else:
+        move = possible_moves[np.random.randint(len(possible_moves))]
+    return move
 
 def play_a_game(commentary = True):
     board = init_board() # initialize the board
     player = 1 # player 1 starts
-    numberOfTurns = 0
     
     # play on
-    while (not game_over(board) and not check_for_error(board)):
+    while not game_over(board): #and not check_for_error(board):
         if commentary: print("lets go player ",player)
         
         dice = roll_dice() # roll dice
         if commentary: print("rolled dices:", dice)
         
-        # make a move (2 moves if the same number appears on the dices)
+        # make a move (2 moves if the same number appears on the dice)
         for i in range(1+int(dice[0] == dice[1])):
-            # check out the legal moves available for dice
             board_copy = np.copy(board)
-            possible_moves, possible_boards = legal_moves(board_copy, dice, player)
-            # if commentary: print("possible moves: ", possible_moves)
-            
-            # use your policy to pick the best move
+
+            # make the move
             if player == 1:
-                move = agent(possible_boards, possible_moves)
+                move = agent.action(board_copy,dice,player,i)
             elif player == -1:
-                move = random_agent(possible_boards, possible_moves)
-                
-            # need to make sure the move is one of the possible moves
-            # maybe only use integers as an output of the agents?
-            if commentary: print("move chosen by player ",player,":",move)
-            
-            # make the move and update the board
-            for m in move:
-                board = update_board(board, m, player)
+                move = random_agent(board_copy,dice,player,i)
         
-            if commentary: pretty_print(board)
+            # update the board
+            if len(move) != 0:
+                for m in move:
+                    board = update_board(board, m, player)
+            
+            if commentary: 
+                print("move from player",player,":")
+                print("board:")
+                pretty_print(board)
     
         # players take turns 
         player = -player
-        
-        # count the turns
-        numberOfTurns += 1
-    
-    numberOfRounds = int(np.floor(numberOfTurns/2))
-    
-    # return the winner and the number of rounds
-    return -1*player, numberOfRounds
+            
+    # return the winner
+    return -1*player
 
 def main():
-    winner, numberOfRounds = play_a_game(commentary=True)
-    print("player", winner, "won the game in", numberOfRounds, "rounds")
-    
+    winners = {}; winners["1"]=0; winners["-1"]=0;
+    nGames = 100
+    for g in range(nGames):
+        winner = play_a_game(commentary=False)
+        winners[str(winner)] += 1
+    print("out of", nGames, "games,")
+    print("player", 1, "won", winners["1"],"times and")
+    print("player", -1, "won", winners["-1"],"times")
+
 if __name__ == '__main__':
     main()
     
