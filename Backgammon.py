@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Backgammon interface
+Run this program to play a game of Backgammon
 The agent is in another file
-Most, if not all, changes should only be made in the main function
+Most (if not all) of your agent-develeping code should be written in the agent.py file
+However feel free to change this file as you wish.
 """
 import numpy as np
 import agent
