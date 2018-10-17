@@ -3,12 +3,14 @@
 """
 Backgammon interface
 Run this program to play a game of Backgammon
-The agent is in another file
+The agent is stored in another file 
 Most (if not all) of your agent-develeping code should be written in the agent.py file
-However feel free to change this file as you wish.
+Feel free to change this file as you wish but you will only submit your agent 
+so make sure your changes here won't affect his performance.
 """
 import numpy as np
 import agent
+# import flipped_agent 
 
 def init_board():
     # initializes the game board
@@ -37,17 +39,19 @@ def check_for_error(board):
     errorInProgram = False
     
     if (sum(board[board>0]) != 15 or sum(board[board<0]) != -15):
-        # too many pieces on board
+        # too many or too few pieces on board
         errorInProgram = True
-        print("To many pieces on board!")
+        print("Too many or too few pieces on board!")
     return errorInProgram
     
 def pretty_print(board):
     string = str(np.array2string(board[1:13])+'\n'+
                  np.array2string(board[24:12:-1])+'\n'+
                  np.array2string(board[25:29]))
-    print(string)
+    print("board: \n", string)
     
+            
+        
 def legal_move(board, die, player):
     # finds legal moves for a board and one dice
     # inputs are some BG-board, the number on the die and which player is up
@@ -188,43 +192,50 @@ def random_agent(board_copy,dice,player,i):
     # check out the legal moves available for dice throw
     possible_moves, possible_boards = legal_moves(board_copy, dice, player)
     
-    if len(possible_moves) == 0:
+    # if there are no possible moves, return empty move:
+    if len(possible_moves) == 0: 
         return []
-    else:
-        move = possible_moves[np.random.randint(len(possible_moves))]
+    
+    # pick a random move:
+    move = possible_moves[np.random.randint(len(possible_moves))]
     return move
+    
 
-def play_a_game(commentary = True):
+def play_a_game(commentary = False):
     board = init_board() # initialize the board
-    player = 1 # player 1 starts
+    player = np.random.randint(2)*2-1 # which player begins?
     
     # play on
-    while not game_over(board): #and not check_for_error(board):
+    while not game_over(board) and not check_for_error(board):
         if commentary: print("lets go player ",player)
         
-        dice = roll_dice() # roll dice
+        # roll dice
+        dice = roll_dice()
         if commentary: print("rolled dices:", dice)
-        
+            
         # make a move (2 moves if the same number appears on the dice)
         for i in range(1+int(dice[0] == dice[1])):
-            board_copy = np.copy(board)
+            board_copy = np.copy(board) 
 
-            # make the move
-            if player == 1:
-                move = agent.action(board_copy,dice,player,i)
-            elif player == -1:
-                move = random_agent(board_copy,dice,player,i)
-        
+            # make the move (agent vs agent):
+            move = agent.action(board_copy,dice,player,i) 
+            
+            # if you're playing vs random agent:
+#            if player == 1:
+#                move = agent.action(board_copy,dice,player,i)
+#            elif player == -1:
+#                move = random_agent(board_copy,dice,player,i) 
+            
             # update the board
             if len(move) != 0:
                 for m in move:
                     board = update_board(board, m, player)
             
+            # give status after every move:         
             if commentary: 
                 print("move from player",player,":")
-                print("board:")
                 pretty_print(board)
-    
+                
         # players take turns 
         player = -player
             
@@ -232,15 +243,17 @@ def play_a_game(commentary = True):
     return -1*player
 
 def main():
-    winners = {}; winners["1"]=0; winners["-1"]=0;
-    nGames = 100
+    winners = {}; winners["1"]=0; winners["-1"]=0; # Collecting stats of the games
+    nGames = 100 # how many games?
     for g in range(nGames):
         winner = play_a_game(commentary=False)
         winners[str(winner)] += 1
-    print("out of", nGames, "games,")
+    print("Out of", nGames, "games,")
     print("player", 1, "won", winners["1"],"times and")
     print("player", -1, "won", winners["-1"],"times")
 
 if __name__ == '__main__':
     main()
     
+    
+
