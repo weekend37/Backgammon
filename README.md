@@ -18,7 +18,7 @@ few examples:
 - `board[21] = -10` means that player -1 has 10 pieces on the 21st position of the board.
 - `board[28] = -2` would mean that player -1 has beared off two pieces.
 
-## Moves
+## Moving the pieces
 The game is played between agents. Your main agent should be coded and trained in the **agent.py** file.
 When the Backgammon.py program is executed, it imports your agent and uses his decisions to make moves.
 The moves are simple. They are written as lists of two numbers where the 
@@ -38,9 +38,9 @@ to make the following move: http://www.bkgm.com/faq/gif/pickandpass.gif
 the agent of player 1 has to return the list ```[(10,5),(5,3)] ```
 
 ## Thoughts and advices
-#### Running time
+### Running time
 running time for one game is ~55ms per game or just under a minute per 1000 games (see time_test.py) when the players are only random agents that are not training. When training your agents, you might want to think cautiously about the time complexity of your code. Feel free to make your own faster code of Backgammon (and then share it!) but make sure your agents will be integrable for this version.
-#### different perspectives
+### different perspectives
 Your players have to be able to both play as player 1 and player -1. For this to be possible you can either 
   - flip the board and always make your player feel like player one. The code has already been made in the file **flipped_agent.py**.  There you can find the functions *flip_board* and *flip_move* as well as an example of an agent that uses them (hopefully) correctly.
   - account for both cases (as the moves will be different for the different players). Note that the training time will be twice as much as for the other option.
