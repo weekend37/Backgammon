@@ -1,5 +1,6 @@
 # Backgammon
 Backgammon interface for the final project in Computational Intelligence
+*** README will be updated tonight, wednesday 17.okt ***
 
 ## The board interpretation
 The two players are defined as player 1 and player -1.
