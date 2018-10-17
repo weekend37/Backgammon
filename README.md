@@ -1,5 +1,6 @@
 # Backgammon
-Backgammon interface for the final project in Computational Intelligence
+Backgammon interface for the final project in Computational Intelligence.
+
 *** README will be updated tonight, wednesday 17.okt ***
 
 ## The board interpretation
