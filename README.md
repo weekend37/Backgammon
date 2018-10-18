@@ -1,5 +1,5 @@
 # Backgammon
-Backgammon interface for the 2nd and 3rd projects in Computational Intelligence.
+Backgammon interface for the 2nd and 3rd computational assignments in Computational Intelligence.
 
 ## The board interpretation
 The game is set up in the **Backgammon.py** file. To play a game, simply run the program.
@@ -40,7 +40,7 @@ the agent of player 1 has to return the list ```[(10,5),(5,3)] ```
 ## Thoughts and advices
 ### Running time
 running time for one game is ~55ms per game or just under a minute per 1000 games (see time_test.py) when the players are only random agents that are not training. When training your agents, you might want to think cautiously about the time complexity of your code. Feel free to make your own faster code of Backgammon (and then share it!) but make sure your agents will be integrable for this version.
-### different perspectives
+### Different perspectives
 Your players have to be able to both play as player 1 and player -1. For this to be possible you can either 
-  - flip the board and always make your player feel like player one. The code has already been made in the file **flipped_agent.py**.  There you can find the functions *flip_board* and *flip_move* as well as an example of an agent that uses them (hopefully) correctly.
+  - flip the board and always make your player feel like player one. The code has already been made in the file **flipped_agent.py**.  There you can find the functions *flip_board* and *flip_move* as well as an example of an agent that uses them correctly.
   - account for both cases (as the moves will be different for the different players). Note that the training time will be twice as much as for the other option.
