@@ -44,3 +44,5 @@ running time for one game is ~55ms per game or just under a minute per 1000 game
 Your players have to be able to both play as player 1 and player -1. For this to be possible you can either 
   - flip the board and always make your player feel like player one. The code has already been made in the file **flipped_agent.py**.  There you can find the functions *flip_board* and *flip_move* as well as an example of an agent that uses them correctly.
   - account for both cases (as the moves will be different for the different players). Note that the training time will be twice as much as for the other option.
+### Cheating
+To save running time, the coded game doesn't check if your player is cheating. Because of that, you have to be careful that your player isn't doing so (e.g. accidentally making 7 moves instead of 2 or maybe moving his piece from the starting position to the end position and therefore always beating his opponents). The moves from the agents will be checked before they are submitted in the final tournament.
