@@ -8,7 +8,7 @@ The board has 29 positions:
 - positions 1-24 are the labeled on-board positions
 - positions 25 and 26 are the jails for when a piece is "killed" (25 is the jail for player 1 and 26 for player -1)
 - positions 27 and 28 represent the position of the pieces who have been beard off (27 for player 1 and 28 for player -1)
-- number 0 is pointless and is not being used...
+- position 0 is pointless and is not being used...
 
 The number of pieces in a certain possition of the board is represented by n where |n| is the number of pieces in the 
 position and sign(n) indicates which player owns the pieces in the position. 
