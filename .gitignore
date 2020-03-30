@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 flipped_board.py
 time_test.py
+.env/
